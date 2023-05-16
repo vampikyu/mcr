@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CD Player</title>
+    <style>
+
+        ::selection {
+            color: #ffffff;
+            background: #ba2f2f;
+        }
+
+        @font-face {
+            font-family: mcr;
+            src: url(mcr.ttf);
+        }
+
+        body {
+            background-color: black;
+            font-family: mcr;
+            color: #fff;
+            margin-left: 400px;
+            margin-right: 400px;
+            text-align: center;
+            font-size: 15pt;
+        }
+
+        .cd-player {
+            text-align: center;
+            margin: 50px auto;
+        }
+        .cd-player img {
+            width: 200px;
+            height: 200px;
+            animation: spin 2s linear infinite paused;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .controls button {
+            margin: 5px;
+            padding: 20px 20px;
+            font-family: mcr;
+            font-size: 15pt;
+            color: #ba2f2f;
+            background-color: black;
+            border-color: white;
+            border-width: 4px;
+            border-style: solid;
+            border-radius: 20px;
+        }
+
+        .controls button:hover {
+            color: #ffffff;
+            background-color: #ba2f2f;
+        }
+
+        .display {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .slidecontainer {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #ffffff;
+  outline: none;
+  opacity: 0.7;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #ba2f2f;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #ba2f2f;
+  cursor: pointer;
+}
+    </style>
+    <script>
+        // JavaScript code to handle CD player functionality
+        var cdStatus = 'stopped';
+        var displayElement;
+        var audioElement;
+        var currentSongIndex = 0;
+        var songs = [
+            { title: 'Helena', source: 'songs/01.mp3' },
+            { title: 'Give Em Hell Kid', source: 'songs/02.mp3' },
+            { title: 'To The End', source: 'songs/03.mp3' },
+            { title: 'You Know What They Do To Guys Like Us In Prison', source: 'songs/04.mp3' },
+            { title: 'Im Not Okay, I Promise', source: 'songs/05.mp3' },
+            { title: 'The Ghost Of You', source: 'songs/06.mp3' },
+            { title: 'The Jetset Life Is Gonna Kill You', source: 'songs/07.mp3' },
+            { title: 'Interlude', source: 'songs/08.mp3' },
+            { title: 'Thank You For The Venom', source: 'songs/09.mp3' },
+            { title: 'Hang Em High', source: 'songs/10.mp3' },
+            { title: 'Its Not A Fashion Statement, Its A Fucking Deathwish', source: 'songs/11.mp3' },
+            { title: 'Cemetery Drive', source: 'songs/12.mp3' },
+            { title: 'I Never Told You What I Do for A Living', source: 'songs/13.mp3' }
+        ];
+        
+        function playCD() {
+            if (cdStatus === 'stopped') {
+                cdStatus = 'playing';
+                displayElement.innerHTML = 'CD is playing: ' + songs[currentSongIndex].title;
+                audioElement.src = songs[currentSongIndex].source;
+                audioElement.play();
+                document.getElementById('cdImage').style.animationPlayState = 'running';
+            }
+        }
+        
+        function pauseCD() {
+            if (cdStatus === 'playing') {
+                cdStatus = 'paused';
+                displayElement.innerHTML = 'CD is paused: ' + songs[currentSongIndex].title;
+                audioElement.pause();
+                document.getElementById('cdImage').style.animationPlayState = 'paused';
+            }
+        }
+        
+        function stopCD() {
+            if (cdStatus !== 'stopped') {
+                cdStatus = 'stopped';
+                displayElement.innerHTML = 'CD is nor playing.';
+                audioElement.pause();
+                audioElement.currentTime = 0;
+                document.getElementById('cdImage').style.animationPlayState = 'paused';
+                document.getElementById('cdImage').style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        function nextSong() {
+            if (cdStatus !== 'stopped') {
+                currentSongIndex = (currentSongIndex + 1) % songs.length;
+                displayElement.innerHTML = 'CD is playing: ' + songs[currentSongIndex].title;
+                audioElement.src = songs[currentSongIndex].source;
+                audioElement.play();
+                document.getElementById('cdImage').style.animationPlayState = 'running';
+            }
+        }
+        
+        function previousSong() {
+            if (cdStatus !== 'stopped') {
+                currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+                displayElement.innerHTML = 'CD is playing: ' + songs[currentSongIndex].title;
+                audioElement.src = songs
+[currentSongIndex].source;
+audioElement.play();
+document.getElementById('cdImage').style.animationPlayState = 'running';
+}
+}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        displayElement = document.getElementById('display');
+        audioElement = document.getElementById('audio');
+    });
+
+    function adjustVolume(volume) {
+            var audioElement = document.getElementById('audio');
+            audioElement.volume = volume / 100;
+        }
+
+</script>
+</head>
+<body>
+    <div class="cd-player">
+        <img src="cd.png" alt="CD" id="cdImage">
+        <div class="controls">
+            <button onclick="previousSong()">Previous</button>
+            <button onclick="playCD()">Play</button>
+            <button onclick="pauseCD()">Pause</button>
+            <button onclick="stopCD()">Stop</button>
+            <button onclick="nextSong()">Next</button>
+        </div>
+        <br>
+        <div class="display" id="display">CD is not playing.</div>
+        <audio id="audio"></audio>
+    </div>
+</body>
+<body>
+    volume:
+    <br><br>
+    <div class="slidecontainer">
+        <input type="range" min="0" max="100" value="50"  class="slider" onchange="adjustVolume(this.value)">
+    </div>
+</body>
+</html>
